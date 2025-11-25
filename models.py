@@ -273,6 +273,7 @@ class PAMNet_s(nn.Module):
         self.mlp_rbf_l = MLP([16, self.dim])    
         self.mlp_sbf = MLP([num_spherical * num_radial, self.dim])
 
+        ''' ORIGINAL ONE
         self.global_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.global_layer.append(Global_MessagePassing(config))
@@ -280,6 +281,12 @@ class PAMNet_s(nn.Module):
         self.local_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.local_layer.append(Local_MessagePassing_s(config))
+        '''
+
+        # MINE1
+        # weight-sharing در نسخه‌ی ساده‌تر مدل
+        self.global_layer = Global_MessagePassing(config)
+        self.local_layer = Local_MessagePassing_s(config)
 
         self.softmax = nn.Softmax(dim=-1)
 
@@ -362,6 +369,7 @@ class PAMNet_s(nn.Module):
         att_score_global: list[torch.Tensor] = []
         att_score_local: list[torch.Tensor] = []
 
+        ''' ORIGINAL ONE
         for layer in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer[layer](x, edge_attr_rbf_g, edge_index_g)
             out_global.append(out_g)
@@ -377,7 +385,31 @@ class PAMNet_s(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
+        '''
 
+        # MINE1
+        # weight-sharing در نسخه‌ی ساده
+        for _ in range(self.n_layer):
+            x, out_g, att_score_g = self.global_layer(
+                x,
+                edge_attr_rbf_g,
+                edge_index_g,
+            )
+            out_global.append(out_g)
+            att_score_global.append(att_score_g)
+
+            x, out_l, att_score_l = self.local_layer(
+                x,
+                edge_attr_rbf_l,
+                edge_attr_sbf,
+                idx_jj_pair,
+                idx_ji_pair,
+                edge_index_l,
+            )
+            out_local.append(out_l)
+            att_score_local.append(att_score_l)
+
+        
         # Fusion of local and global representations
         att_score = torch.cat((torch.cat(att_score_global, dim=0), torch.cat(att_score_local, dim=0)), dim=-1)
         att_score = F.leaky_relu(att_score, negative_slope=0.2)
