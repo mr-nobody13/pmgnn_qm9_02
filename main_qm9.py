@@ -17,6 +17,7 @@ from utils import EMA
 from datasets import QM9
 
 from tqdm.auto import tqdm
+import time
 
 
 def set_seed(seed):
@@ -81,7 +82,8 @@ def main():
     # val_dataset = dataset[110000:120000]
     # test_dataset = dataset[120000:]
 
-        # ---- Small QM9 subset: 5000 molecules total ----
+    #MINE
+    # ---- Small QM9 subset: 5000 molecules total ----
     small_dataset = dataset[:5000]   # 5000 نمونه تصادفی از QM9
 
     # 4000 train, 500 val, 500 test
@@ -109,6 +111,10 @@ def main():
     scheduler_warmup = GradualWarmupScheduler(optimizer, multiplier=1.0, total_epoch=1, after_scheduler=scheduler)
 
     ema = EMA(model, decay=0.999)
+
+    #MINE
+    # شروع تایمر آموزش (کل ایپاک‌ها)
+    train_start_time = time.time()
 
     print("Start training!")
     best_val_loss = None
@@ -150,9 +156,13 @@ def main():
 
         print('Epoch: {:03d}, Train MAE: {:.7f}, Val MAE: {:.7f}, '
             'Test MAE: {:.7f}'.format(epoch+1, loss, val_loss, test_loss))
+
     print('Best Validation MAE:', best_val_loss)
     print('Testing MAE:', test_loss)
-
+    
+    #MINE
+    total_time = time.time() - train_start_time
+    print(f"Total training time: {total_time:.2f} s ({total_time/60:.2f} min)")
 
 if __name__ == "__main__":
     main()
