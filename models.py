@@ -82,7 +82,7 @@ class PAMNet(nn.Module):
         self.mlp_sbf2 = MLP([num_spherical * num_radial, self.dim])
 
 
-        '''
+        #'''
         # ORIGINAL CODE1
         self.global_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
@@ -97,7 +97,7 @@ class PAMNet(nn.Module):
         # که چند بار پشت سر هم روی x اعمال می‌شوند.
         self.global_layer = Global_MessagePassing(config)
         self.local_layer = Local_MessagePassing(config)
-        
+        '''
 
         self.softmax = nn.Softmax(dim=-1)
 
@@ -212,7 +212,7 @@ class PAMNet(nn.Module):
         att_score_global: list[torch.Tensor] = []
         att_score_local: list[torch.Tensor] = []
 
-        '''
+        #'''
         # ORIGINAL ONE1
         for layer in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer[layer](x, edge_attr_rbf_g, edge_index_g)
@@ -258,7 +258,7 @@ class PAMNet(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
-            
+            '''
 
 
         
@@ -316,7 +316,7 @@ class PAMNet_s(nn.Module):
         self.mlp_rbf_l = MLP([8, self.dim])    
         self.mlp_sbf = MLP([num_spherical * num_radial, self.dim])  # 3*4=12
 
-        '''
+        #'''
         # ORIGINAL ONE1
         self.global_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
@@ -331,7 +331,7 @@ class PAMNet_s(nn.Module):
         # weight-sharing در نسخه‌ی ساده‌تر مدل
         self.global_layer = Global_MessagePassing(config)
         self.local_layer = Local_MessagePassing_s(config)
-        
+        '''
 
         self.softmax = nn.Softmax(dim=-1)
 
@@ -414,7 +414,7 @@ class PAMNet_s(nn.Module):
         att_score_global: list[torch.Tensor] = []
         att_score_local: list[torch.Tensor] = []
 
-        '''
+        #'''
         # ORIGINAL ONE1
         for layer in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer[layer](x, edge_attr_rbf_g, edge_index_g)
@@ -454,7 +454,7 @@ class PAMNet_s(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
-            
+            '''
 
         
         # Fusion of local and global representations
