@@ -38,10 +38,9 @@ class PAMNet(nn.Module):
     def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):  
     
 
-    '''
     # MINE2
-    def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
-    '''
+    #def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
+    
         
         super(PAMNet, self).__init__()
 
@@ -290,10 +289,9 @@ class PAMNet_s(nn.Module):
     def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
     
         
-    '''
     #MINE2
-    def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
-    '''
+    #def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
+    
         
         super(PAMNet_s, self).__init__()
 
