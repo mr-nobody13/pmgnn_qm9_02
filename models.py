@@ -33,7 +33,14 @@ class Config(object):
         self.flow = flow
 
 class PAMNet(nn.Module):
+    ''' 
+    # ORIGINAL ONE2
     def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
+    '''
+    
+    # MINE2
+    def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
+        
         super(PAMNet, self).__init__()
 
         # store configuration
@@ -52,6 +59,9 @@ class PAMNet(nn.Module):
         # repository.
         self.embeddings = nn.Parameter(torch.ones((5, self.dim)))
 
+        ''' 
+        # 
+        # ORIGINAL CODE2
         self.rbf_g = BesselBasisLayer(16, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(16, self.cutoff_l, envelope_exponent)
         self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
@@ -60,9 +70,21 @@ class PAMNet(nn.Module):
         self.mlp_rbf_l = MLP([16, self.dim])    
         self.mlp_sbf1 = MLP([num_spherical * num_radial, self.dim])
         self.mlp_sbf2 = MLP([num_spherical * num_radial, self.dim])
+        '''
+
+        #MINE2
+        self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
+        self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
+        self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
+
+        self.mlp_rbf_g = MLP([8, self.dim])
+        self.mlp_rbf_l = MLP([8, self.dim])    
+        self.mlp_sbf1 = MLP([num_spherical * num_radial, self.dim])  # 3*4=12
+        self.mlp_sbf2 = MLP([num_spherical * num_radial, self.dim])
 
 
-        ''' ORIGINAL CODE
+        
+        # ORIGINAL CODE1
         self.global_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.global_layer.append(Global_MessagePassing(config))
@@ -76,7 +98,7 @@ class PAMNet(nn.Module):
         # که چند بار پشت سر هم روی x اعمال می‌شوند.
         self.global_layer = Global_MessagePassing(config)
         self.local_layer = Local_MessagePassing(config)
-
+        '''
 
         self.softmax = nn.Softmax(dim=-1)
 
@@ -191,7 +213,8 @@ class PAMNet(nn.Module):
         att_score_global: list[torch.Tensor] = []
         att_score_local: list[torch.Tensor] = []
 
-        ''' ORIGINAL ONE
+         
+        # ORIGINAL ONE1
         for layer in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer[layer](x, edge_attr_rbf_g, edge_index_g)
             out_global.append(out_g)
@@ -236,6 +259,7 @@ class PAMNet(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
+            '''
 
 
         
@@ -254,7 +278,14 @@ class PAMNet(nn.Module):
 
 
 class PAMNet_s(nn.Module):
+
+    ''' ORIGINAL ONE2
     def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
+    '''
+
+    #MINE2
+    def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
+        
         super(PAMNet_s, self).__init__()
 
         self.dataset = config.dataset
@@ -265,6 +296,8 @@ class PAMNet_s(nn.Module):
 
         self.embeddings = nn.Parameter(torch.ones((5, self.dim)))
 
+        ''' 
+        # ORIGINAL ONE2
         self.rbf_g = BesselBasisLayer(16, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(16, self.cutoff_l, envelope_exponent)
         self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
@@ -272,8 +305,19 @@ class PAMNet_s(nn.Module):
         self.mlp_rbf_g = MLP([16, self.dim])
         self.mlp_rbf_l = MLP([16, self.dim])    
         self.mlp_sbf = MLP([num_spherical * num_radial, self.dim])
+        '''
+        
+        #MINE2
+        self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
+        self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
+        self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
 
-        ''' ORIGINAL ONE
+        self.mlp_rbf_g = MLP([8, self.dim])
+        self.mlp_rbf_l = MLP([8, self.dim])    
+        self.mlp_sbf = MLP([num_spherical * num_radial, self.dim])  # 3*4=12
+
+         
+        # ORIGINAL ONE1
         self.global_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.global_layer.append(Global_MessagePassing(config))
@@ -287,6 +331,7 @@ class PAMNet_s(nn.Module):
         # weight-sharing در نسخه‌ی ساده‌تر مدل
         self.global_layer = Global_MessagePassing(config)
         self.local_layer = Local_MessagePassing_s(config)
+        '''
 
         self.softmax = nn.Softmax(dim=-1)
 
@@ -369,7 +414,8 @@ class PAMNet_s(nn.Module):
         att_score_global: list[torch.Tensor] = []
         att_score_local: list[torch.Tensor] = []
 
-        ''' ORIGINAL ONE
+         
+        # ORIGINAL ONE1
         for layer in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer[layer](x, edge_attr_rbf_g, edge_index_g)
             out_global.append(out_g)
@@ -408,6 +454,7 @@ class PAMNet_s(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
+            '''
 
         
         # Fusion of local and global representations
