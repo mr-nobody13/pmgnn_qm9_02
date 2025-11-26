@@ -35,10 +35,10 @@ class Config(object):
 class PAMNet(nn.Module):
     #''' 
     # ORIGINAL ONE2
-    def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
-        
+    def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):  
+    #'''
+
     '''
-    
     # MINE2
     def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
     '''
@@ -71,9 +71,9 @@ class PAMNet(nn.Module):
         self.mlp_rbf_l = MLP([16, self.dim])    
         self.mlp_sbf1 = MLP([num_spherical * num_radial, self.dim])
         self.mlp_sbf2 = MLP([num_spherical * num_radial, self.dim])
+        #'''
 
         '''
-
         #MINE2
         self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
@@ -95,9 +95,9 @@ class PAMNet(nn.Module):
         self.local_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.local_layer.append(Local_MessagePassing(config))
-            
+        #'''
+
         '''
-        
         # MINE1
         # نسخه‌ی weight-sharing: فقط یک لایه global و یک لایه local
         # که چند بار پشت سر هم روی x اعمال می‌شوند.
@@ -238,9 +238,9 @@ class PAMNet(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
-            
-        '''
+        #'''
 
+        '''
         # MINE1
         # weight-sharing: همان لایه‌ی global/local را n_layer بار تکرار می‌کنیم
         for _ in range(self.n_layer):
@@ -265,7 +265,7 @@ class PAMNet(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
-            '''
+        '''
 
 
         
@@ -288,9 +288,9 @@ class PAMNet_s(nn.Module):
     #''' 
     # ORIGINAL ONE2
     def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
+    #'''
         
     '''
-
     #MINE2
     def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
     '''
@@ -314,9 +314,9 @@ class PAMNet_s(nn.Module):
         self.mlp_rbf_g = MLP([16, self.dim])
         self.mlp_rbf_l = MLP([16, self.dim])    
         self.mlp_sbf = MLP([num_spherical * num_radial, self.dim])
-
-        '''
+        #'''
         
+        '''
         #MINE2
         self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
@@ -336,9 +336,9 @@ class PAMNet_s(nn.Module):
         self.local_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.local_layer.append(Local_MessagePassing_s(config))
-            
-        '''
+        #'''
 
+        '''
         # MINE1
         # weight-sharing در نسخه‌ی ساده‌تر مدل
         self.global_layer = Global_MessagePassing(config)
@@ -443,9 +443,9 @@ class PAMNet_s(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
-            
+        #'''
+        
         '''
-
         # MINE1
         # weight-sharing در نسخه‌ی ساده
         for _ in range(self.n_layer):
@@ -467,7 +467,7 @@ class PAMNet_s(nn.Module):
             )
             out_local.append(out_l)
             att_score_local.append(att_score_l)
-            '''
+        '''
 
         
         # Fusion of local and global representations
