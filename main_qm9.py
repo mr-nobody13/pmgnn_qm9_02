@@ -84,12 +84,12 @@ def main():
 
     #MINE
     # ---- Small QM9 subset: 5000 molecules total ----
-    small_dataset = dataset[:5000]   # 5000 نمونه تصادفی از QM9
+    small_dataset = dataset[:20000]   # 5000 نمونه تصادفی از QM9
 
     # 4000 train, 500 val, 500 test
-    train_dataset = small_dataset[:4000]
-    val_dataset   = small_dataset[4000:4500]
-    test_dataset  = small_dataset[4500:5000]
+    train_dataset = small_dataset[:16000]
+    val_dataset   = small_dataset[16000:18000]
+    test_dataset  = small_dataset[18000:20000]
     # -----------------------------------------------
 
     
