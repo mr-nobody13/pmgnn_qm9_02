@@ -35,11 +35,11 @@ class Config(object):
 class PAMNet(nn.Module):
      
     # ORIGINAL ONE2
-    def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):  
+    #def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):  
     
 
     # MINE2
-    #def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
+    def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
     
         
         super(PAMNet, self).__init__()
@@ -60,7 +60,7 @@ class PAMNet(nn.Module):
         # repository.
         self.embeddings = nn.Parameter(torch.ones((5, self.dim)))
 
-          
+        '''  
         # ORIGINAL CODE2
         self.rbf_g = BesselBasisLayer(16, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(16, self.cutoff_l, envelope_exponent)
@@ -70,9 +70,9 @@ class PAMNet(nn.Module):
         self.mlp_rbf_l = MLP([16, self.dim])    
         self.mlp_sbf1 = MLP([num_spherical * num_radial, self.dim])
         self.mlp_sbf2 = MLP([num_spherical * num_radial, self.dim])
-        
-
         '''
+
+        #'''
         #MINE2
         self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
@@ -82,7 +82,7 @@ class PAMNet(nn.Module):
         self.mlp_rbf_l = MLP([8, self.dim])    
         self.mlp_sbf1 = MLP([num_spherical * num_radial, self.dim])  # 3*4=12
         self.mlp_sbf2 = MLP([num_spherical * num_radial, self.dim])
-        '''
+        #'''
 
 
         '''
@@ -287,11 +287,11 @@ class PAMNet_s(nn.Module):
 
      
     # ORIGINAL ONE2
-    def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
+    #def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
     
         
     #MINE2
-    #def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
+    def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
     
         
         super(PAMNet_s, self).__init__()
@@ -304,7 +304,7 @@ class PAMNet_s(nn.Module):
 
         self.embeddings = nn.Parameter(torch.ones((5, self.dim)))
 
-         
+        ''' 
         # ORIGINAL ONE2
         self.rbf_g = BesselBasisLayer(16, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(16, self.cutoff_l, envelope_exponent)
@@ -313,9 +313,9 @@ class PAMNet_s(nn.Module):
         self.mlp_rbf_g = MLP([16, self.dim])
         self.mlp_rbf_l = MLP([16, self.dim])    
         self.mlp_sbf = MLP([num_spherical * num_radial, self.dim])
-        
-        
         '''
+        
+        #'''
         #MINE2
         self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
@@ -324,7 +324,7 @@ class PAMNet_s(nn.Module):
         self.mlp_rbf_g = MLP([8, self.dim])
         self.mlp_rbf_l = MLP([8, self.dim])    
         self.mlp_sbf = MLP([num_spherical * num_radial, self.dim])  # 3*4=12
-        '''
+        #'''
 
         '''
         # ORIGINAL ONE1
