@@ -78,18 +78,18 @@ def main():
     dataset = QM9(path, transform=MyTransform()).shuffle()
 
     # Split dataset
-    #train_dataset = dataset[:110000]
-    #val_dataset = dataset[110000:120000]
-    #test_dataset = dataset[120000:]
+    train_dataset = dataset[:110000]
+    val_dataset = dataset[110000:120000]
+    test_dataset = dataset[120000:]
 
     #MINE
     # ---- Small QM9 subset: 5000 molecules total ----
-    small_dataset = dataset[:20000]   # 5000 نمونه تصادفی از QM9
+    #small_dataset = dataset[:20000]   # 5000 نمونه تصادفی از QM9
 
     # 4000 train, 500 val, 500 test
-    train_dataset = small_dataset[:16000]
-    val_dataset   = small_dataset[16000:18000]
-    test_dataset  = small_dataset[18000:20000]
+    #train_dataset = small_dataset[:16000]
+    #val_dataset   = small_dataset[16000:18000]
+    #test_dataset  = small_dataset[18000:20000]
     # -----------------------------------------------
 
     
