@@ -34,11 +34,11 @@ class Config(object):
 
 class PAMNet(nn.Module):
      
-    # ORIGINAL ONE2
+    # ORIGINAL_2: basis functions without reduction
     #def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):  
     
 
-    # MINE2
+    # MINE_2: basis functions with reduction
     def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
     
         
@@ -61,7 +61,7 @@ class PAMNet(nn.Module):
         self.embeddings = nn.Parameter(torch.ones((5, self.dim)))
 
         '''  
-        # ORIGINAL CODE2
+        # ORIGINAL_2: basis functions without reduction
         self.rbf_g = BesselBasisLayer(16, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(16, self.cutoff_l, envelope_exponent)
         self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
@@ -73,7 +73,7 @@ class PAMNet(nn.Module):
         '''
 
         #'''
-        #MINE2
+        # MINE_2: basis functions with reduction
         self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
         self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
@@ -86,7 +86,7 @@ class PAMNet(nn.Module):
 
 
         '''
-        # ORIGINAL CODE1
+        # ORIGINAL_1: without weight sharing
         self.global_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.global_layer.append(Global_MessagePassing(config))
@@ -98,7 +98,7 @@ class PAMNet(nn.Module):
         
 
         #'''
-        # MINE1
+        # MINE_1: with weight sharing
         # نسخه‌ی weight-sharing: فقط یک لایه global و یک لایه local
         # که چند بار پشت سر هم روی x اعمال می‌شوند.
         self.global_layer = Global_MessagePassing(config)
@@ -219,7 +219,7 @@ class PAMNet(nn.Module):
         att_score_local: list[torch.Tensor] = []
 
         '''
-        # ORIGINAL ONE1
+        # ORIGINAL_1: without weight sharing
         for layer in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer[layer](x, edge_attr_rbf_g, edge_index_g)
             out_global.append(out_g)
@@ -241,7 +241,7 @@ class PAMNet(nn.Module):
         '''
 
         #'''
-        # MINE1
+        # MINE_1: with weight sharing
         # weight-sharing: همان لایه‌ی global/local را n_layer بار تکرار می‌کنیم
         for _ in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer(
@@ -286,11 +286,11 @@ class PAMNet(nn.Module):
 class PAMNet_s(nn.Module):
 
      
-    # ORIGINAL ONE2
+    # ORIGINAL_2: basis functions without reduction
     #def __init__(self, config: Config, num_spherical=7, num_radial=6, envelope_exponent=5):
     
         
-    #MINE2
+    # MINE_2: basis functions with reduction
     def __init__(self, config: Config, num_spherical=3, num_radial=4, envelope_exponent=5):
     
         
@@ -305,7 +305,7 @@ class PAMNet_s(nn.Module):
         self.embeddings = nn.Parameter(torch.ones((5, self.dim)))
 
         ''' 
-        # ORIGINAL ONE2
+        # ORIGINAL_2: basis functions without reduction
         self.rbf_g = BesselBasisLayer(16, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(16, self.cutoff_l, envelope_exponent)
         self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
@@ -316,7 +316,7 @@ class PAMNet_s(nn.Module):
         '''
         
         #'''
-        #MINE2
+        # MINE_2: basis functions with reduction
         self.rbf_g = BesselBasisLayer(8, self.cutoff_g, envelope_exponent)
         self.rbf_l = BesselBasisLayer(8, self.cutoff_l, envelope_exponent)
         self.sbf = SphericalBasisLayer(num_spherical, num_radial, self.cutoff_l, envelope_exponent)
@@ -327,7 +327,7 @@ class PAMNet_s(nn.Module):
         #'''
 
         '''
-        # ORIGINAL ONE1
+        # ORIGINAL_1: without weight sharing
         self.global_layer = torch.nn.ModuleList()
         for _ in range(config.n_layer):
             self.global_layer.append(Global_MessagePassing(config))
@@ -339,7 +339,7 @@ class PAMNet_s(nn.Module):
         
 
         #'''
-        # MINE1
+        # MINE_1: with weight sharing
         # weight-sharing در نسخه‌ی ساده‌تر مدل
         self.global_layer = Global_MessagePassing(config)
         self.local_layer = Local_MessagePassing_s(config)
@@ -427,7 +427,7 @@ class PAMNet_s(nn.Module):
         att_score_local: list[torch.Tensor] = []
 
         '''
-        # ORIGINAL ONE1
+        # ORIGINAL_1: without weight sharing
         for layer in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer[layer](x, edge_attr_rbf_g, edge_index_g)
             out_global.append(out_g)
@@ -446,7 +446,7 @@ class PAMNet_s(nn.Module):
         '''
         
         #'''
-        # MINE1
+        # MINE_1: with weight sharing
         # weight-sharing در نسخه‌ی ساده
         for _ in range(self.n_layer):
             x, out_g, att_score_g = self.global_layer(
